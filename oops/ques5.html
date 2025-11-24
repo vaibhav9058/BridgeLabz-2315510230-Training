@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ride Sharing Application</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f3f3f3;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .box {
+        width: 350px;
+        margin: 15px auto;
+        background: white;
+        padding: 18px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #aaa;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    #error {
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+</style>
+</head>
+<body>
+
+<h2>Ride-Sharing System</h2>
+
+<div id="output"></div>
+<div id="error"></div>
+
+<script>
+    // Class User
+    class User {
+        constructor(name, rating) {
+            this.name = name;
+            this.rating = rating;
+        }
+    }
+
+    // Driver inherits User
+    class Driver extends User {
+        constructor(name, rating, vehicle) {
+            super(name, rating);
+            this.vehicle = vehicle;
+        }
+    }
+
+    // Trip Class
+    class Trip {
+        constructor(fromLocation, toLocation, distance) {
+            this.fromLocation = fromLocation;
+            this.toLocation = toLocation;
+            this.distance = distance;
+        }
+
+        // Fare calculation with error handling
+        calculateFare() {
+            if (this.distance === undefined || this.distance === null) {
+                throw new Error("Distance is required.");
+            }
+
+            if (this.distance < 0) {
+                throw new Error("Distance cannot be negative.");
+            }
+
+            const ratePerKm = 12;  // cost per KM
+            return this.distance * ratePerKm;
+        }
+    }
+
+    // Create Driver & Trip Objects and Handle Errors
+    let outputDiv = document.getElementById("output");
+    let errorDiv = document.getElementById("error");
+
+    try {
+        let driver = new Driver("Amit", 4.8, "Honda City");
+        let trip = new Trip("Mathura", "Agra", 55); // valid
+
+        let fare = trip.calculateFare();
+
+        outputDiv.innerHTML = `
+            <div class="box">
+                <div class="title">Driver Details</div>
+                Name: ${driver.name}<br>
+                Rating: ${driver.rating}<br>
+                Vehicle: ${driver.vehicle}<br><br>
+
+                <div class="title">Trip Details</div>
+                From: ${trip.fromLocation}<br>
+                To: ${trip.toLocation}<br>
+                Distance: ${trip.distance} km<br>
+                <b>Total Fare: ₹${fare}</b>
+            </div>
+        `;
+    }
+    catch (err) {
+        errorDiv.innerHTML = "Error: " + err.message;
+    }
+</script>
+
+</body>
+</html>

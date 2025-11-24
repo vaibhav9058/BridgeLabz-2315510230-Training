@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Processing</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .student-card {
+            background: white;
+            padding: 15px;
+            margin: 15px auto;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px #aaa;
+        }
+        .name {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .result {
+            margin-top: 8px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h2>Student Result Processing System</h2>
+
+    <div id="output"></div>
+
+    <script>
+        // Student Class
+        class Student {
+            constructor(name, marks) {
+                this.name = name;
+                this.marks = marks;
+            }
+
+            // Calculate average using reduce()
+            calculateAverage() {
+                let sum = this.marks.reduce((total, num) => total + num, 0);
+                return (sum / this.marks.length).toFixed(2);
+            }
+
+            // Grade based on average
+            getGrade() {
+                let avg = this.calculateAverage();
+
+                if (avg >= 90) return "A";
+                else if (avg >= 75) return "B";
+                else if (avg >= 50) return "C";
+                else return "F";
+            }
+        }
+
+        // Testing 3 Students
+        let s1 = new Student("Deepak", [95, 92, 88]);
+        let s2 = new Student("Amit", [72, 75, 78]);
+        let s3 = new Student("Ram", [40, 55, 50]);
+
+        let students = [s1, s2, s3];
+
+        // Display result on HTML page
+        let outputDiv = document.getElementById("output");
+
+        students.forEach(st => {
+            outputDiv.innerHTML += `
+                <div class="student-card">
+                    <div class="name">${st.name}</div>
+                    <div class="result">Marks: ${st.marks.join(", ")}</div>
+                    <div class="result">Average: ${st.calculateAverage()}</div>
+                    <div class="result">Grade: <b>${st.getGrade()}</b></div>
+                </div>
+            `;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Online Food Ordering</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f3f3f3;
+        padding: 20px;
+    }
+    h2 {
+        text-align: center;
+    }
+    .box {
+        background: white;
+        padding: 20px;
+        width: 350px;
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #aaa;
+    }
+    input {
+        width: 95%;
+        padding: 8px;
+        margin-top: 10px;
+    }
+    button {
+        margin-top: 12px;
+        padding: 10px 15px;
+        background: black;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+    #result {
+        margin-top: 15px;
+        font-weight: bold;
+        color: green;
+    }
+    #error {
+        margin-top: 15px;
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+</head>
+<body>
+
+<h2>Online Food Ordering System</h2>
+
+<div class="box">
+    <p>Enter food items separated by comma (e.g., pizza, burger, momo)</p>
+
+    <input id="orderInput" type="text" placeholder="Enter items here...">
+    <button onclick="placeOrder()">Calculate Bill</button>
+
+    <div id="result"></div>
+    <div id="error"></div>
+</div>
+
+<script>
+    // Menu Items with prices
+    const menu = {
+        pizza: 120,
+        burger: 80,
+        momo: 60,
+        pasta: 100,
+        dosa: 70
+    };
+
+    function calculateBill(orderItems) {
+        // Convert to lowercase and trim spaces
+        let items = orderItems.map(i => i.trim().toLowerCase());
+
+        // Check invalid item → throw error
+        items.forEach(item => {
+            if (!menu[item]) {
+                throw new Error(`Item not found: ${item}`);
+            }
+        });
+
+        // Get price list using map()
+        let prices = items.map(item => menu[item]);
+
+        // Calculate total using reduce()
+        let total = prices.reduce((sum, val) => sum + val, 0);
+
+        return total;
+    }
+
+    function placeOrder() {
+        let input = document.getElementById("orderInput").value;
+
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("error").innerHTML = "";
+
+        try {
+            let items = input.split(",");
+            let bill = calculateBill(items);
+
+            document.getElementById("result").innerHTML =
+                `Total Bill: ₹${bill}`;
+        }
+        catch (err) {
+            document.getElementById("error").innerHTML =
+                `Error: ${err.message}`;
+        }
+    }
+</script>
+
+</body>
+</html>

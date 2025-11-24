@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Blog Posts</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: #f2f2f2;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #controls button {
+            margin: 7px;
+            padding: 10px 20px;
+            border: none;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #controls button:hover {
+            background: #555;
+        }
+
+        .post {
+            background: white;
+            padding: 15px;
+            margin: 12px 0;
+            border-left: 5px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 3px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 3px 7px;
+            margin-right: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Dynamic Blog Posts</h1>
+
+<div id="controls">
+    <button onclick="addPost()">Add New Post</button>
+    <button onclick="prependPost()">Prepend Featured Post</button>
+    <button onclick="removeLast()">Remove Last Post</button>
+    <button onclick="addTags()">Add Tags</button>
+    <button onclick="highlightKeywords()">Highlight Keywords</button>
+</div>
+
+<hr>
+
+<div id="blogArea">
+    <div class="post">This is the first example blog post.</div>
+    <div class="post">Learning JavaScript is fun and powerful.</div>
+</div>
+
+<script>
+    function addPost() {
+        let content = prompt("Enter new post text:");
+        if (content) {
+            let newPost = document.createElement("div");
+            newPost.className = "post";
+            newPost.textContent = content;
+            document.getElementById("blogArea").appendChild(newPost);
+        }
+    }
+
+    function prependPost() {
+        let content = prompt("Enter featured post:");
+        if (content) {
+            let newPost = document.createElement("div");
+            newPost.className = "post";
+            newPost.textContent = "🌟 FEATURED: " + content;
+            document.getElementById("blogArea").prepend(newPost);
+        }
+    }
+
+    function removeLast() {
+        let posts = document.querySelectorAll(".post");
+        if (posts.length > 0) {
+            posts[posts.length - 1].remove();
+        } else {
+            alert("No posts left to remove!");
+        }
+    }
+
+    function addTags() {
+        let posts = document.querySelectorAll(".post");
+        posts.forEach(post => {
+            let tag = document.createElement("span");
+            tag.className = "tag";
+            tag.textContent = "#Tag";
+
+            // Add before OR after each post
+            post.before(tag.cloneNode(true));
+            post.after(tag.cloneNode(true));
+        });
+    }
+
+    function highlightKeywords() {
+        let keyword = prompt("Enter keyword to highlight:");
+        if (!keyword) return;
+
+        let posts = document.querySelectorAll(".post");
+
+        posts.forEach(post => {
+            let text = post.textContent;
+            let regex = new RegExp(keyword, "gi");
+
+            post.innerHTML = text.replace(regex, match => {
+                return `<span class='highlight'>${match}</span>`;
+            });
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Offer Banner</title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f2f2f2;
+            padding: 40px;
+        }
+
+        .banner {
+            width: 80%;
+            margin: 10px auto;
+            padding: 20px;
+            background: #ffeb3b;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 10px;
+            display: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #2196f3;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Special Offer Banners</h1>
+
+    <div class="banner" id="banner1">🔥 50% OFF on all products!</div>
+    <div class="banner" id="banner2">🎁 Buy 1 Get 1 Free!</div>
+    <div class="banner" id="banner3">🚚 Free Delivery Today!</div>
+
+    <br>
+
+    <button id="hideBtn">Hide Banners</button>
+    <button id="showBtn">Show Banners</button>
+    <button id="slideBtn">Slide Up / Down</button>
+    <button id="fadeBtn">Fade In / Out</button>
+
+    <script>
+        // Show banners initially
+        $(".banner").fadeIn(1000);
+
+        // 1. HIDE BUTTON
+        $("#hideBtn").click(() => {
+            $(".banner").hide();
+        });
+
+        // 2. SHOW BUTTON
+        $("#showBtn").click(() => {
+            $(".banner").show();
+        });
+
+        // 3. SLIDE UP/DOWN
+        let slideToggle = true;
+        $("#slideBtn").click(() => {
+            if (slideToggle) {
+                $(".banner").slideUp();
+            } else {
+                $(".banner").slideDown();
+            }
+            slideToggle = !slideToggle;
+        });
+
+        // 4. FADE IN/FADE OUT
+        let fadeToggle = true;
+        $("#fadeBtn").click(() => {
+            if (fadeToggle) {
+                $(".banner").fadeOut(800);
+            } else {
+                $(".banner").fadeIn(800);
+            }
+            fadeToggle = !fadeToggle;
+        });
+
+        // 5. AUTO ROTATE EVERY 5 SECONDS
+        let index = 0;
+        const banners = $(".banner");
+
+        setInterval(() => {
+            banners.eq(index).fadeOut(800, () => {
+                index = (index + 1) % banners.length;
+                banners.eq(index).fadeIn(800);
+            });
+        }, 5000);
+
+    </script>
+
+</body>
+</html>

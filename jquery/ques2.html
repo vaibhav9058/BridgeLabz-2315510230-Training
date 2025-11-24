@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page Greeting</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            padding: 50px;
+            background: #f2f2f2;
+        }
+
+        #greeting {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        #welcomeMessage {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            background: #008cff;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 id="greeting">Welcome!</h1>
+    <p id="welcomeMessage">We are happy to see you on our website.</p>
+
+    <button id="changeBtn">Change Greeting</button>
+    <button id="toggleBtn">Toggle Welcome Message</button>
+
+    <script>
+        const greeting = document.getElementById("greeting");
+        const welcomeMessage = document.getElementById("welcomeMessage");
+        const changeBtn = document.getElementById("changeBtn");
+        const toggleBtn = document.getElementById("toggleBtn");
+
+        //  Greeting based on time of day
+        window.onload = () => {
+            const hour = new Date().getHours();
+            const msg =
+                hour < 12 ? "Good Morning!" :
+                hour < 18 ? "Good Afternoon!" :
+                            "Good Evening!";
+            greeting.textContent = msg;
+        };
+
+        //  Change greeting to motivational quote
+        changeBtn.addEventListener("click", () => {
+            const quotes = [
+                "Believe in yourself!",
+                "You are stronger than you think.",
+                "Every day is a new opportunity!",
+                "Keep moving forward!",
+                "Success starts with a positive mindset!"
+            ];
+            greeting.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        });
+
+        //  Toggle welcome message
+        toggleBtn.addEventListener("click", () => {
+            const isHidden = welcomeMessage.style.display === "none";
+            welcomeMessage.style.display = isHidden ? "block" : "none";
+        });
+
+        //  Alert on greeting click
+        greeting.addEventListener("click", () => {
+            alert("You clicked the greeting!");
+        });
+    </script>
+
+</body>
+</html>

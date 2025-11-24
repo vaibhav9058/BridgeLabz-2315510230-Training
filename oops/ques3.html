@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Discount System</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f4f4f4;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .product-box {
+        width: 350px;
+        background: white;
+        padding: 20px;
+        margin: 15px auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #aaa;
+    }
+
+    .name {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .price {
+        margin: 8px 0;
+    }
+</style>
+
+</head>
+<body>
+
+<h2>Product Discount System</h2>
+
+<div id="output"></div>
+
+<script>
+    // ---------------------------
+    // Constructor Function
+    // ---------------------------
+    function Product(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    // ---------------------------
+    // Prototype Method
+    // ---------------------------
+    Product.prototype.applyDiscount = function(percent) {
+        let discountAmount = (this.price * percent) / 100;
+        return (this.price - discountAmount).toFixed(2);
+    };
+
+    // ---------------------------
+    // Creating 3 Products
+    // ---------------------------
+    let p1 = new Product("Laptop", 50000);
+    let p2 = new Product("Mobile", 20000);
+    let p3 = new Product("Headphones", 3000);
+
+    // ---------------------------
+    // Apply Discounts
+    // ---------------------------
+    let output = `
+        <div class="product-box">
+            <div class="name">${p1.name}</div>
+            <div class="price">Original Price: ₹${p1.price}</div>
+            <div class="price">After 10% Discount: ₹${p1.applyDiscount(10)}</div>
+        </div>
+
+        <div class="product-box">
+            <div class="name">${p2.name}</div>
+            <div class="price">Original Price: ₹${p2.price}</div>
+            <div class="price">After 20% Discount: ₹${p2.applyDiscount(20)}</div>
+        </div>
+
+        <div class="product-box">
+            <div class="name">${p3.name}</div>
+            <div class="price">Original Price: ₹${p3.price}</div>
+            <div class="price">After 15% Discount: ₹${p3.applyDiscount(15)}</div>
+        </div>
+    `;
+
+    document.getElementById("output").innerHTML = output;
+
+</script>
+
+</body>
+</html>
