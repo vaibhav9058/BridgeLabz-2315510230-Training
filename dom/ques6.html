@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f1f1f1;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            width: 400px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 12px;
+            background: #0095ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .success {
+            margin-top: 15px;
+            font-size: 18px;
+            color: green;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Form Validation</h2>
+
+    <form id="myForm">
+
+        <label>Name:</label>
+        <input type="text" id="name">
+        <div class="error" id="nameError">Name is required</div>
+
+        <label>Email:</label>
+        <input type="text" id="email">
+        <div class="error" id="emailError">Email must contain @</div>
+
+        <label>Password:</label>
+        <input type="password" id="password">
+        <div class="error" id="passError">Password must be at least 6 characters</div>
+
+        <button type="submit">Submit</button>
+
+        <div class="success" id="successMsg">Form Submitted Successfully!</div>
+    </form>
+
+</div>
+
+<script>
+    const form = document.getElementById("myForm");
+    const nameField = document.getElementById("name");
+    const emailField = document.getElementById("email");
+    const passField = document.getElementById("password");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const passError = document.getElementById("passError");
+    const successMsg = document.getElementById("successMsg");
+
+    // LIVE VALIDATION
+    nameField.addEventListener("input", () => {
+        nameError.style.display = nameField.value.trim() === "" ? "block" : "none";
+    });
+
+    emailField.addEventListener("input", () => {
+        emailError.style.display = emailField.value.includes("@") ? "none" : "block";
+    });
+
+    passField.addEventListener("input", () => {
+        passError.style.display = passField.value.length >= 6 ? "none" : "block";
+    });
+
+    // ON SUBMIT
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();  // stops form submission
+
+        let valid = true;
+
+        if (nameField.value.trim() === "") {
+            nameError.style.display = "block";
+            valid = false;
+        }
+
+        if (!emailField.value.includes("@")) {
+            emailError.style.display = "block";
+            valid = false;
+        }
+
+        if (passField.value.length < 6) {
+            passError.style.display = "block";
+            valid = false;
+        }
+
+        if (valid) {
+            successMsg.style.display = "block";
+        }
+    });
+</script>
+
+</body>
+</html>

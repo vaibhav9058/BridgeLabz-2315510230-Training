@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery with Modal</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .modal-content img {
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>📸 Image Gallery with Modal</h2>
+
+    <div class="gallery">
+        <img src="https://picsum.photos/id/1015/400/300">
+        <img src="https://picsum.photos/id/1025/400/300">
+        <img src="https://picsum.photos/id/1035/400/300">
+        <img src="https://picsum.photos/id/1045/400/300">
+        <img src="https://picsum.photos/id/1055/400/300">
+        <img src="https://picsum.photos/id/1065/400/300">
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+            <img id="modalImage" src="">
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("modal");
+        const modalImg = document.getElementById("modalImage");
+        const modalContent = document.getElementById("modalContent");
+
+        // OPEN MODAL ON IMAGE CLICK
+        document.querySelector(".gallery").addEventListener("click", (e) => {
+            if (e.target.tagName === "IMG") {
+                modal.style.display = "flex";
+                modalImg.src = e.target.src;
+            }
+        });
+
+        // CLOSE MODAL BY CLICKING OUTSIDE
+        modal.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        // PREVENT CLOSING WHEN CLICKING INSIDE MODAL
+        modalContent.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+    </script>
+
+</body>
+</html>

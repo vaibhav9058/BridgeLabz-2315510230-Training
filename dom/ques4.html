@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Multi Step Form</title>
+<style>
+    body{
+        font-family: Arial;
+        padding: 20px;
+        background: #f2f2f2;
+    }
+    .step{
+        display: none;
+        background: white;
+        padding: 20px;
+        width: 350px;
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #aaa;
+    }
+    .active{
+        display: block;
+    }
+    button{
+        padding: 10px 15px;
+        margin: 10px 5px 0 0;
+        cursor: pointer;
+    }
+    #summaryBox{
+        background: #fff;
+        padding: 20px;
+        width: 350px;
+        margin: 20px auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #aaa;
+        display: none;
+    }
+    .error{
+        color: red;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center;">3-Step Multi Form</h2>
+
+<!-- STEP 1 -->
+<div class="step active" id="step1">
+    <h3>Step 1: Name</h3>
+    <input type="text" id="name" placeholder="Enter name">
+    <div class="error" id="err1"></div>
+    <button id="next1">Next</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step" id="step2">
+    <h3>Step 2: Email</h3>
+    <input type="text" id="email" placeholder="Enter email">
+    <div class="error" id="err2"></div>
+    <button id="back2">Back</button>
+    <button id="next2">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="step" id="step3">
+    <h3>Step 3: Password</h3>
+    <input type="password" id="password" placeholder="Enter password">
+    <div class="error" id="err3"></div>
+    <button id="back3">Back</button>
+    <button id="finish">Finish</button>
+</div>
+
+<!-- SUMMARY -->
+<div id="summaryBox">
+    <h3>Summary</h3>
+    <p id="sumName"></p>
+    <p id="sumEmail"></p>
+    <p id="sumPass"></p>
+</div>
+
+<script>
+// Get elements
+let step1 = document.getElementById("step1");
+let step2 = document.getElementById("step2");
+let step3 = document.getElementById("step3");
+let summaryBox = document.getElementById("summaryBox");
+
+// Inputs
+let nameInput = document.getElementById("name");
+let emailInput = document.getElementById("email");
+let passInput = document.getElementById("password");
+
+// Error messages
+let err1 = document.getElementById("err1");
+let err2 = document.getElementById("err2");
+let err3 = document.getElementById("err3");
+
+// NEXT 1 → Step 2
+document.getElementById("next1").addEventListener("click", () => {
+    if(nameInput.value.trim() === ""){
+        err1.innerText = "Name is required";
+    } else {
+        err1.innerText = "";
+        step1.classList.remove("active");
+        step2.classList.add("active");
+    }
+});
+
+// BACK (Step2 → Step1)
+document.getElementById("back2").addEventListener("click", () => {
+    step2.classList.remove("active");
+    step1.classList.add("active");
+});
+
+// NEXT 2 → Step 3
+document.getElementById("next2").addEventListener("click", () => {
+    let email = emailInput.value.trim();
+
+    if(email === ""){
+        err2.innerText = "Email is required";
+    }
+    else if(!email.includes("@") || !email.includes(".")){
+        err2.innerText = "Enter valid email address";
+    }
+    else{
+        err2.innerText = "";
+        step2.classList.remove("active");
+        step3.classList.add("active");
+    }
+});
+
+// BACK (Step3 → Step2)
+document.getElementById("back3").addEventListener("click", () => {
+    step3.classList.remove("active");
+    step2.classList.add("active");
+});
+
+// FINISH → SHOW SUMMARY
+document.getElementById("finish").addEventListener("click", () => {
+    if(passInput.value.trim().length < 4){
+        err3.innerText = "Password must be 4+ characters";
+    }
+    else{
+        err3.innerText = "";
+
+        // Show summary
+        document.getElementById("sumName").innerText = "Name: " + nameInput.value;
+        document.getElementById("sumEmail").innerText = "Email: " + emailInput.value;
+        document.getElementById("sumPass").innerText = "Password: " + passInput.value;
+
+        step1.style.display = "none";
+        step2.style.display = "none";
+        step3.style.display = "none";
+
+        summaryBox.style.display = "block";
+    }
+});
+</script>
+
+</body>
+</html>
