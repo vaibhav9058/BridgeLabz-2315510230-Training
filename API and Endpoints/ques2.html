@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Status Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+        table {
+            width: 450px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        td, th {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .active {
+            color: green;
+            font-weight: bold;
+        }
+        .inactive {
+            color: red;
+            font-weight: bold;
+        }
+        .toggle-btn {
+            padding: 5px 12px;
+            cursor: pointer;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+        }
+        .on { background: green; }
+        .off { background: red; }
+
+        #error {
+            color: red;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Employee Status Dashboard</h2>
+
+    <table id="employeeTable">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Toggle</th>
+        </tr>
+    </table>
+
+    <p id="error">Error updating status! Reverting...</p>
+
+    <script>
+        const table = document.getElementById("employeeTable");
+        const errorBox = document.getElementById("error");
+
+        // Load employees using XMLHttpRequest
+        function loadEmployees() {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:3002/employees");
+            xhr.responseType = "json";
+
+            xhr.onload = function () {
+                let data = xhr.response;
+
+                data.forEach(emp => addRow(emp));
+            };
+
+            xhr.send();
+        }
+
+        // Create row UI
+        function addRow(emp) {
+            let row = document.createElement("tr");
+            row.setAttribute("data-id", emp.id);
+
+            row.innerHTML = `
+                <td>${emp.id}</td>
+                <td>${emp.name}</td>
+                <td class="status ${emp.status}">${emp.status}</td>
+                <td>
+                    <button class="toggle-btn ${emp.status === "active" ? "on" : "off"}">
+                        ${emp.status === "active" ? "Deactivate" : "Activate"}
+                    </button>
+                </td>
+            `;
+
+            table.appendChild(row);
+
+            // Add toggle event
+            row.querySelector(".toggle-btn").onclick = function () {
+                toggleStatus(emp, row);
+            };
+        }
+
+        // Toggle employee status
+        function toggleStatus(emp, row) {
+            let btn = row.querySelector(".toggle-btn");
+            let statusCell = row.querySelector(".status");
+
+            let oldStatus = emp.status;
+            let newStatus = emp.status === "active" ? "inactive" : "active";
+
+            // Update UI immediately
+            updateUI(statusCell, btn, newStatus);
+
+            // Send PATCH request
+            let xhr = new XMLHttpRequest();
+            xhr.open("PATCH", `http://localhost:3002/employees/${emp.id}`);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    emp.status = newStatus; // success — save final
+                } else {
+                    revertUI(statusCell, btn, oldStatus);
+                }
+            };
+
+            xhr.onerror = function () {
+                revertUI(statusCell, btn, oldStatus);
+            };
+
+            xhr.send(JSON.stringify({ status: newStatus }));
+        }
+
+        // UI Update Function
+        function updateUI(cell, btn, status) {
+            cell.textContent = status;
+            cell.className = "status " + status;
+
+            if (status === "active") {
+                btn.textContent = "Deactivate";
+                btn.className = "toggle-btn on";
+            } else {
+                btn.textContent = "Activate";
+                btn.className = "toggle-btn off";
+            }
+        }
+
+        // Revert UI if request fails
+        function revertUI(cell, btn, oldStatus) {
+            errorBox.style.display = "block";
+
+            // revert UI
+            updateUI(cell, btn, oldStatus);
+
+            // Hide error after 2 sec
+            setTimeout(() => {
+                errorBox.style.display = "none";
+            }, 2000);
+        }
+
+        // Start
+        loadEmployees();
+    </script>
+
+</body>
+</html>

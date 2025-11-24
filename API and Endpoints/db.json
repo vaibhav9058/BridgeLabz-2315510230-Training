@@ -1,0 +1,35 @@
+
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 14",
+      "price": 79999,
+      "image": "https://via.placeholder.com/120"
+    },
+    {
+      "id": 2,
+      "name": "Samsung Galaxy S22",
+      "price": 69999,
+      "image": "https://via.placeholder.com/120"
+    },
+    {
+      "id": 3,
+      "name": "Redmi Note 12",
+      "price": 18999,
+      "image": "https://via.placeholder.com/120"
+    },
+    {
+      "id": 4,
+      "name": "OnePlus Nord CE",
+      "price": 24999,
+      "image": "https://via.placeholder.com/120"
+    },
+    {
+      "id": 5,
+      "name": "Vivo V29",
+      "price": 29999,
+      "image": "https://via.placeholder.com/120"
+    }
+  ]
+}

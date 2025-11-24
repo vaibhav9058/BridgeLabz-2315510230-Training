@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Timetable Viewer</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .classBox {
+            width: 350px;
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>College Timetable Viewer</h2>
+
+    <label><strong>Select Day:</strong></label>
+    <select id="daySelect">
+        <option value="">-- Select Day --</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+    </select>
+
+    <div id="timetable"></div>
+    <p id="message"></p>
+
+    <script>
+        const select = document.getElementById("daySelect");
+        const container = document.getElementById("timetable");
+        const message = document.getElementById("message");
+
+        // Load timetable based on selected day
+        select.addEventListener("change", function () {
+            let day = select.value;
+
+            container.innerHTML = "";
+            message.textContent = "";
+
+            if (!day) return;
+
+            fetch(`http://localhost:3005/timetable?day=${day}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        message.textContent = "No classes today.";
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        container.innerHTML += `
+                            <div class="classBox">
+                                <strong>Subject:</strong> ${item.subject}<br>
+                                <strong>Faculty:</strong> ${item.faculty}<br>
+                                <strong>Time:</strong> ${item.time}
+                            </div>
+                        `;
+                    });
+                });
+        });
+    </script>
+
+</body>
+</html>

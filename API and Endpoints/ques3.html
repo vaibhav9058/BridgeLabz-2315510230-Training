@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager With Filters</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .task {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px;
+            width: 350px;
+            border-radius: 8px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Task Manager</h2>
+
+    <label><strong>Filter by:</strong></label>
+    <select id="filterSelect">
+        <option value="">All Tasks</option>
+        <option value="low">Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
+        <option value="completed">Completed</option>
+    </select>
+
+    <div id="taskList"></div>
+
+    <script>
+
+        // Load tasks based on filter
+        function loadTasks() {
+            let filter = $("#filterSelect").val();
+            let url = "http://localhost:3003/tasks";
+
+            if (filter === "completed") {
+                url += "?completed=true";
+            } else if (filter) {
+                url += `?priority=${filter}`;
+            }
+
+            $.ajax({
+                url: url,
+                method: "GET",
+                success: function (data) {
+                    displayTasks(data);
+                }
+            });
+        }
+
+        // Display tasks UI
+        function displayTasks(tasks) {
+            $("#taskList").html("");
+
+            tasks.forEach(task => {
+                $("#taskList").append(`
+                    <div class="task ${task.completed ? 'completed' : ''}" data-id="${task.id}">
+                        <input type="checkbox" class="taskCheck" ${task.completed ? 'checked' : ''}>
+                        <strong>${task.title}</strong><br>
+                        Priority: ${task.priority}
+                    </div>
+                `);
+            });
+
+            // Add checkbox toggle event
+            $(".taskCheck").on("change", function () {
+                let parent = $(this).closest(".task");
+                let id = parent.data("id");
+                let newCompleted = $(this).is(":checked");
+
+                toggleCompleted(id, newCompleted, parent);
+            });
+        }
+
+        // PATCH toggle completed
+        function toggleCompleted(id, newValue, element) {
+
+            $.ajax({
+                url: `http://localhost:3003/tasks/${id}`,
+                method: "PATCH",
+                data: JSON.stringify({ completed: newValue }),
+                contentType: "application/json",
+                success: function () {
+                    if (newValue) {
+                        element.addClass("completed");
+                    } else {
+                        element.removeClass("completed");
+                    }
+                }
+            });
+        }
+
+        // Filter change event
+        $("#filterSelect").on("change", loadTasks);
+
+        // Initial load
+        loadTasks();
+
+    </script>
+
+</body>
+</html>

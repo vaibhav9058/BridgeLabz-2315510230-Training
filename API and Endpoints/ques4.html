@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi API Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .card {
+            width: 250px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .skeleton {
+            width: 100px;
+            height: 25px;
+            margin: 0 auto;
+            background: #ddd;
+            border-radius: 4px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.4; }
+        }
+
+        #warning {
+            color: red;
+            font-weight: bold;
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Multi-API Dashboard</h2>
+
+    <div class="card">
+        <h3>Total Users</h3>
+        <div id="usersCount" class="skeleton"></div>
+    </div>
+
+    <div class="card">
+        <h3>Total Orders</h3>
+        <div id="ordersCount" class="skeleton"></div>
+    </div>
+
+    <div class="card">
+        <h3>Total Products</h3>
+        <div id="productsCount" class="skeleton"></div>
+    </div>
+
+    <p id="warning">Some data could not be loaded.</p>
+
+    <script>
+        const usersEl = document.getElementById("usersCount");
+        const ordersEl = document.getElementById("ordersCount");
+        const productsEl = document.getElementById("productsCount");
+        const warning = document.getElementById("warning");
+
+        // Fetch all API data simultaneously
+        Promise.all([
+            fetch("http://localhost:3004/users").then(r => r.json()),
+            fetch("http://localhost:3004/orders").then(r => r.json()),
+            fetch("http://localhost:3004/products").then(r => r.json())
+        ]).then(([users, orders, products]) => {
+
+            // Fill data
+            usersEl.textContent = users.length;
+            usersEl.classList.remove("skeleton");
+
+            ordersEl.textContent = orders.length;
+            ordersEl.classList.remove("skeleton");
+
+            productsEl.textContent = products.length;
+            productsEl.classList.remove("skeleton");
+
+        }).catch(() => {
+            // ANY failure → show warning
+            warning.style.display = "block";
+
+            usersEl.textContent = "Error";
+            usersEl.classList.remove("skeleton");
+
+            ordersEl.textContent = "Error";
+            ordersEl.classList.remove("skeleton");
+
+            productsEl.textContent = "Error";
+            productsEl.classList.remove("skeleton");
+        });
+
+    </script>
+
+</body>
+</html>

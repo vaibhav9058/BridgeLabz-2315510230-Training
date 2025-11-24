@@ -1,0 +1,20 @@
+
+{
+  "users": [
+    { "id": 1, "name": "Deepak" },
+    { "id": 2, "name": "Amit" },
+    { "id": 3, "name": "Shreya" }
+  ],
+
+  "orders": [
+    { "id": 1, "amount": 1200 },
+    { "id": 2, "amount": 500 },
+    { "id": 3, "amount": 760 },
+    { "id": 4, "amount": 999 }
+  ],
+
+  "products": [
+    { "id": 1, "title": "Laptop" },
+    { "id": 2, "title": "Mouse" }
+  ]
+}
